@@ -1,5 +1,5 @@
 name: SignStonks
-version: @version@
+version: ${project.version}
 main: com.nchroniaris.signstonks.SignStonks
 api-version: 1.13
 depend: [ SignShop ]
