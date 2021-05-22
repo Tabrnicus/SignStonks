@@ -2,5 +2,5 @@ name: SignStonks
 version: ${project.version}
 main: com.nchroniaris.signstonks.SignStonks
 api-version: 1.13
-depend: [ SignShop ]
+depend: [ SignShop, NBTAPI ]
 description: Uses SignShop and an external data source to enable a "stock market" in game
