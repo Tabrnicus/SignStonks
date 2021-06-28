@@ -4,6 +4,8 @@ import com.nchroniaris.signstonks.repository.StockRepository;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * YAML-based repository for storing {@link com.nchroniaris.mcstonks.stock.Stock} objects
  */
@@ -16,7 +18,11 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
      */
     public StockRepositoryYAML(@NotNull JavaPlugin plugin) {
 
-        super(plugin, plugin.getDataFolder().toPath().resolve("stocks.yml"));
+        super(
+                plugin,
+                Objects.requireNonNull(plugin, "plugin cannot be null!")
+                        .getDataFolder().toPath().resolve("stocks.yml")
+        );
 
     }
 

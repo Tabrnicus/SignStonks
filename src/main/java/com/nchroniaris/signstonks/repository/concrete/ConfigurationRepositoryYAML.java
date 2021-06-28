@@ -14,6 +14,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.logging.Level;
 
 /**
@@ -34,15 +35,9 @@ public abstract class ConfigurationRepositoryYAML implements ConfigurationReposi
      */
     protected ConfigurationRepositoryYAML(@NotNull JavaPlugin plugin, @NotNull Path filePath) {
 
-        if (plugin == null)
-            throw new IllegalArgumentException("plugin cannot be null!");
-
-        if (filePath == null)
-            throw new IllegalArgumentException("filePath cannot be null!");
-
         // I am not 100% sure if this is the intended use of references, but I thought it might have been a good idea since there will be a cyclic relationship between the plugin and any repository. This way, when there are no hard references to the plugin elsewhere it will get unloaded
-        this.plugin = new WeakReference<>(plugin);
-        this.filePath = filePath;
+        this.plugin = new WeakReference<>(Objects.requireNonNull(plugin, "plugin cannot be null!"));
+        this.filePath = Objects.requireNonNull(filePath, "filePath cannot be null!");
 
         // Upon instantiation, we (re)load the file and thusly populate the this.configuration field. Doing this makes the class usable right away.
         this.reload();
@@ -56,12 +51,10 @@ public abstract class ConfigurationRepositoryYAML implements ConfigurationReposi
      */
     protected final JavaPlugin getPlugin() {
 
-        JavaPlugin plugin = this.plugin.get();
-
-        if (plugin == null)
-            throw new IllegalStateException("The plugin has been unloaded! Repository methods will not work properly!");
-
-        return plugin;
+        return Objects.requireNonNull(
+                this.plugin.get(),
+                "The plugin has been unloaded! Repository methods will not work properly!"
+        );
 
     }
 

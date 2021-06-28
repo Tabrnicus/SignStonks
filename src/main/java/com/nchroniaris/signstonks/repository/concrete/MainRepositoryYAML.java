@@ -4,6 +4,8 @@ import com.nchroniaris.signstonks.repository.MainRepository;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 /**
  * YAML-based repository for the main plugin's configuration file
  */
@@ -15,7 +17,13 @@ public class MainRepositoryYAML extends ConfigurationRepositoryYAML implements M
      * @param plugin An instance of the main plugin
      */
     public MainRepositoryYAML(@NotNull JavaPlugin plugin) {
-        super(plugin, plugin.getDataFolder().toPath().resolve("config.yml"));
+
+        super(
+                plugin,
+                Objects.requireNonNull(plugin, "plugin cannot be null!")
+                        .getDataFolder().toPath().resolve("config.yml")
+        );
+
     }
 
 }
