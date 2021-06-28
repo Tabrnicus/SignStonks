@@ -47,7 +47,7 @@ public final class SignStonks extends JavaPlugin {
      */
     private void registerListeners() {
 
-        this.getServer().getPluginManager().registerEvents(new TestListener(), this);
+//        this.getServer().getPluginManager().registerEvents(new TestListener(), this);
 
     }
 
