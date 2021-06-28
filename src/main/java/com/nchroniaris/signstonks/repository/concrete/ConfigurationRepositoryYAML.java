@@ -1,6 +1,7 @@
-package com.nchroniaris.signstonks.configuration;
+package com.nchroniaris.signstonks.repository.concrete;
 
 import com.google.common.base.Charsets;
+import com.nchroniaris.signstonks.repository.ConfigurationRepository;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -15,7 +16,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.logging.Level;
 
-public abstract class ConfigurationRepository {
+/**
+ * Base class for any YAML-based repository implementation. It handles saving and loading the changes to the internal {@link FileConfiguration} to and from disk.
+ */
+public abstract class ConfigurationRepositoryYAML implements ConfigurationRepository {
 
     private final Reference<JavaPlugin> plugin;
 
@@ -28,7 +32,7 @@ public abstract class ConfigurationRepository {
      * @param plugin   An instance of the main plugin
      * @param filePath A {@link Path} that refers to the config file. This path can be relative to the server root directory or absolute, whichever is preferable.
      */
-    protected ConfigurationRepository(@NotNull JavaPlugin plugin, @NotNull Path filePath) {
+    protected ConfigurationRepositoryYAML(@NotNull JavaPlugin plugin, @NotNull Path filePath) {
 
         if (plugin == null)
             throw new IllegalArgumentException("plugin cannot be null!");
@@ -39,6 +43,9 @@ public abstract class ConfigurationRepository {
         // I am not 100% sure if this is the intended use of references, but I thought it might have been a good idea since there will be a cyclic relationship between the plugin and any repository. This way, when there are no hard references to the plugin elsewhere it will get unloaded
         this.plugin = new WeakReference<>(plugin);
         this.filePath = filePath;
+
+        // Upon instantiation, we (re)load the file and thusly populate the this.configuration field. Doing this makes the class usable right away.
+        this.reload();
 
     }
 
@@ -93,10 +100,11 @@ public abstract class ConfigurationRepository {
     /**
      * Reloads the config from disk, discarding any unsaved internal changes.
      */
+    @Override
     public void reload() {
 
         // Load the **user-facing** configuration file
-        // As per the documentation, a blank config will be returned if the file DNE or is otherwise invalid. This makes the #setDefaults(Configuration) work unconditionally
+        // As per the documentation, a blank config will be returned if the file DNE or is otherwise invalid. This avoid any NPEs on behalf of this.configuration.
         this.configuration = YamlConfiguration.loadConfiguration(filePath.toFile());
 
         // Get the **resource-version** of the configuration file
@@ -108,7 +116,7 @@ public abstract class ConfigurationRepository {
             return;
         }
 
-        // If the resource version is found, then set the defaults to whatever that is.
+        // If the resource version is found, then set the defaults to whatever that is. This is important because the FileConfiguration get*() methods will look at these defaults if, say, the current file has a certain k/v pair missing and was requested.
         this.configuration.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defaultsStream, Charsets.UTF_8)));
 
     }
@@ -116,6 +124,7 @@ public abstract class ConfigurationRepository {
     /**
      * Saves the default configuration to disk, silently failing if the user-facing file already exists
      */
+    @Override
     public void saveDefaults() {
 
         // If the user-facing file does NOT exist, then ask the plugin to copy the resource-version to the plugin's folder, preserving file hierarchies.
@@ -127,6 +136,7 @@ public abstract class ConfigurationRepository {
     /**
      * Saves the configuration, with any additional modifications to disk
      */
+    @Override
     public void save() {
 
         try {
