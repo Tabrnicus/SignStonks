@@ -30,7 +30,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            ~/sources/SignShop.jar
+            /github/workspace/sources
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -48,7 +48,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Local Dependencies
-        run: mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=sources/SignShop.jar
+        run: mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=/github/workspace/sources/SignShop.jar
 
       - name: Build Project
         run: ./gradlew build
