@@ -30,7 +30,7 @@ jobs:
           path: |
             ~/.gradle/caches
             ~/.gradle/wrapper
-            /github/workspace/sources
+            ${{ GITHUB_WORKSPACE }}/sources
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
@@ -48,13 +48,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Local Dependencies
-        run: mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile=/github/workspace/sources/SignShop.jar
+        run: mvn org.apache.maven.plugins:maven-install-plugin:2.5.2:install-file -Dfile="${GITHUB_WORKSPACE}/sources/SignShop.jar"
 
       - name: Build Project
         run: ./gradlew build
 
-      - name: Build Fat Jar
-        run: ./gradlew fatJar
+      - name: Build regular and shadow jar
+        run: ./gradlew shadowJar
 
       - name: Cleanup Gradle Cache
         # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
