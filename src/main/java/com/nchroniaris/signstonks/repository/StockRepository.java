@@ -1,5 +1,7 @@
 package com.nchroniaris.signstonks.repository;
 
+import com.nchroniaris.signstonks.repository.exception.AlreadyExistsException;
+import com.nchroniaris.signstonks.repository.exception.DoesNotExistException;
 import org.bukkit.Location;
 
 import java.util.List;
@@ -43,16 +45,18 @@ public interface StockRepository extends ConfigurationRepository {
      *
      * @param stock    The {@link UUID} of the {@link com.nchroniaris.mcstonks.stock.Stock} that you want to add to
      * @param location The {@link Location} of the Sign that you want to add. There are no checks for if this location has a valid sign.
+     * @throws AlreadyExistsException Thrown when the provided {@link Location} is already being used.
      */
-    void addTransactionSign(UUID stock, Location location);
+    void addTransactionSign(UUID stock, Location location) throws AlreadyExistsException;
 
     /**
      * Adds a history sign to the list for the {@link com.nchroniaris.mcstonks.stock.Stock} specified by the {@link UUID}.
      *
      * @param stock    The {@link UUID} of the {@link com.nchroniaris.mcstonks.stock.Stock} that you want to add to
      * @param location The {@link Location} of the Sign that you want to add. There are no checks for if this location has a valid sign.
+     * @throws AlreadyExistsException Thrown when the provided {@link Location} is already being used.
      */
-    void addHistorySign(UUID stock, Location location);
+    void addHistorySign(UUID stock, Location location) throws AlreadyExistsException;
 
     /**
      * Deletes a transaction sign from the list for the {@link com.nchroniaris.mcstonks.stock.Stock} specified by the {@link UUID}.
@@ -61,9 +65,9 @@ public interface StockRepository extends ConfigurationRepository {
      *
      * @param stock    The {@link UUID} of the {@link com.nchroniaris.mcstonks.stock.Stock} that you want to remove from
      * @param location The {@link Location} of the Sign that you want to remove.
-     * @return {@code true} if the deletion was successful, {@code false} otherwise
+     * @throws DoesNotExistException Thrown when the provided {@link Location} does not exist in the storage.
      */
-    boolean deleteTransactionSign(UUID stock, Location location);
+    void deleteTransactionSign(UUID stock, Location location) throws DoesNotExistException;
 
     /**
      * Deletes a history sign from the list for the {@link com.nchroniaris.mcstonks.stock.Stock} specified by the {@link UUID}.
@@ -72,9 +76,9 @@ public interface StockRepository extends ConfigurationRepository {
      *
      * @param stock    The {@link UUID} of the {@link com.nchroniaris.mcstonks.stock.Stock} that you want to remove from
      * @param location The {@link Location} of the Sign that you want to remove.
-     * @return {@code true} if the deletion was successful, {@code false} otherwise
+     * @throws DoesNotExistException Thrown when the provided {@link Location} does not exist in the storage.
      */
-    boolean deleteHistorySign(UUID stock, Location location);
+    void deleteHistorySign(UUID stock, Location location) throws DoesNotExistException;
 
     /**
      * Deletes a transaction sign from the list for the {@link com.nchroniaris.mcstonks.stock.Stock} specified by its {@link UUID}.
@@ -84,9 +88,9 @@ public interface StockRepository extends ConfigurationRepository {
      * This method is broader but slower to execute, as it needs to search through all locations saved. Useful if you don't have a UUID.
      *
      * @param location The {@link Location} of the Sign that you want to remove.
-     * @return {@code true} if the deletion was successful, {@code false} otherwise
+     * @throws DoesNotExistException Thrown when the provided {@link Location} does not exist in the storage.
      */
-    boolean deleteTransactionSign(Location location);
+    void deleteTransactionSign(Location location) throws DoesNotExistException;
 
     /**
      * Deletes a history sign from the list for the {@link com.nchroniaris.mcstonks.stock.Stock} specified by its {@link UUID}.
@@ -96,18 +100,18 @@ public interface StockRepository extends ConfigurationRepository {
      * This method is broader but slower to execute, as it needs to search through all locations saved. Useful if you don't have a UUID.
      *
      * @param location The {@link Location} of the Sign that you want to remove.
-     * @return {@code true} if the deletion was successful, {@code false} otherwise
+     * @throws DoesNotExistException Thrown when the provided {@link Location} does not exist in the storage.
      */
-    boolean deleteHistorySign(Location location);
+    void deleteHistorySign(Location location) throws DoesNotExistException;
 
     /**
      * Delete the entry specified by the parameter from the storage. This is designed to be used to clean up unused entries in the configuration.
      * <p>
      * <b>This will delete all associated transaction and history signs!</b>
      *
-     * @param stock The UUID of the entry you want to remove
+     * @param stock The {@link UUID} of the entry you want to remove.
+     * @throws DoesNotExistException Thrown when the provided {@link Location} does not exist in the storage.
      */
-    boolean deleteStockEntry(UUID stock);
-
+    void deleteStockEntry(UUID stock) throws DoesNotExistException;
 
 }

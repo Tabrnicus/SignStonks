@@ -1,6 +1,8 @@
 package com.nchroniaris.signstonks.repository.concrete;
 
 import com.nchroniaris.signstonks.repository.StockRepository;
+import com.nchroniaris.signstonks.repository.exception.AlreadyExistsException;
+import com.nchroniaris.signstonks.repository.exception.DoesNotExistException;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -43,38 +45,38 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
     }
 
     @Override
-    public void addTransactionSign(UUID stock, Location location) {
+    public void addTransactionSign(UUID stock, Location location) throws AlreadyExistsException {
 
     }
 
     @Override
-    public void addHistorySign(UUID stock, Location location) {
+    public void addHistorySign(UUID stock, Location location) throws AlreadyExistsException {
 
     }
 
     @Override
-    public boolean deleteTransactionSign(UUID stock, Location location) {
-        return false;
+    public void deleteTransactionSign(UUID stock, Location location) throws DoesNotExistException {
+
     }
 
     @Override
-    public boolean deleteHistorySign(UUID stock, Location location) {
-        return false;
+    public void deleteHistorySign(UUID stock, Location location) throws DoesNotExistException {
+
     }
 
     @Override
-    public boolean deleteTransactionSign(Location location) {
-        return false;
+    public void deleteTransactionSign(Location location) throws DoesNotExistException {
+
     }
 
     @Override
-    public boolean deleteHistorySign(Location location) {
-        return false;
+    public void deleteHistorySign(Location location) throws DoesNotExistException {
+
     }
 
     @Override
-    public boolean deleteStockEntry(UUID stock) {
-        return false;
+    public void deleteStockEntry(UUID stock) throws DoesNotExistException {
+
     }
 
 }
