@@ -3,6 +3,7 @@ package com.nchroniaris.signstonks.repository;
 import com.nchroniaris.signstonks.repository.exception.AlreadyExistsException;
 import com.nchroniaris.signstonks.repository.exception.DoesNotExistException;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
@@ -21,6 +22,7 @@ public interface StockRepository extends ConfigurationRepository {
      * @param stock The {@link UUID} of the {@link com.nchroniaris.mcstonks.stock.Stock} that you want to get the list for
      * @return A {@link List} of {@link Location}s, each location referencing a (hopefully still) valid SignShop sign. This will return an empty list if there are no locations in the storage OR the UUID does not exist.
      */
+    @NotNull
     List<Location> getTransactionSigns(UUID stock);
 
     /**
@@ -31,13 +33,17 @@ public interface StockRepository extends ConfigurationRepository {
      * @param stock The {@link UUID} of the {@link com.nchroniaris.mcstonks.stock.Stock} that you want to get the list for
      * @return A {@link List} of {@link Location}s, each location referencing a sign (the signs pointed to by these locations are nothing special). This will return an empty list if there are no locations in the storage OR the UUID does not exist.
      */
+    @NotNull
     List<Location> getHistorySigns(UUID stock);
 
     /**
      * Gets all the {@link com.nchroniaris.mcstonks.stock.Stock} {@link UUID}s present in the storage.
+     * <p>
+     * This method makes no guarantees that the UUIDs returned are correct (an incorrect UUID string representation in the storage may be valid but not correct)
      *
      * @return A {@link Set} of {@link UUID}s, each representing a {@link com.nchroniaris.mcstonks.stock.Stock}. This will return an empty list if there are no locations in the storage OR the UUID does not exist.
      */
+    @NotNull
     Set<UUID> getStockEntries();
 
     /**
