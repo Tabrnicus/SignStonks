@@ -44,7 +44,7 @@ jobs:
       - name: Check for SignShop JAR
         id: checkSignShopJar
         continue-on-error: true
-        run: test -f sources/SignShop-*.jar
+        run: test -f sources/SignShop.jar
 
       - name: Fetch SignShop JAR
         if: steps.checkSignShopJar.outcome == 'failure'
