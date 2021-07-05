@@ -39,9 +39,14 @@ jobs:
         run: chmod +x gradlew
 
       - name: Create sources directory
-        run: if [[ ! -d sources ]]; then mkdir sources; else echo already exists; fi
+        run: if [[ ! -d sources ]]; then mkdir sources; else echo folder already exists; fi
+
+      - name: Check for SignShop JAR
+        continue-on-error: true
+        run: test -f sources/SignShop-*.jar
 
       - name: Fetch SignShop JAR
+        if: ${{ failure() }}
         uses: dsaltares/fetch-gh-release-asset@0.06
         with:
           repo: "wargamer/SignShop"
