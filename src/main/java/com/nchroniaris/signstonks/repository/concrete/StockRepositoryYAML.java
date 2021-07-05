@@ -178,7 +178,7 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
                     location.getBlockX(),
                     location.getBlockY(),
                     location.getBlockZ(),
-                    Objects.requireNonNull(location.getWorld())
+                    Objects.requireNonNull(location.getWorld()).getName()
             ));
 
         // There is no replace in-file method so we have to retrieve the list, modify it, and set it back
@@ -221,7 +221,7 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
                     location.getBlockX(),
                     location.getBlockY(),
                     location.getBlockZ(),
-                    Objects.requireNonNull(location.getWorld()),
+                    Objects.requireNonNull(location.getWorld()).getName(),
                     stockUUID
             ));
 
@@ -271,7 +271,7 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
                 location.getBlockX(),
                 location.getBlockY(),
                 location.getBlockZ(),
-                Objects.requireNonNull(location.getWorld())
+                Objects.requireNonNull(location.getWorld()).getName()
         ));
 
     }
