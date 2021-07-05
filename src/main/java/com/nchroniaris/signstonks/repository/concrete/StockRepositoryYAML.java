@@ -246,9 +246,10 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
      * @param location The {@link Location} that you want to delete
      * @param supplier A {@link LocationListSupplier} that supplies the {@link List} you want to modify.
      * @param saver    A {@link LocationListSaver} that saves the resulting list to the storage.
+     * @return The UUID of the stock that the sign has been deleted from, for reference
      * @throws DoesNotExistException Thrown when the location does not exist within the entire storage.
      */
-    private void deleteSignFromList(Location location, LocationListSupplier supplier, LocationListSaver saver) throws DoesNotExistException {
+    private UUID deleteSignFromList(Location location, LocationListSupplier supplier, LocationListSaver saver) throws DoesNotExistException {
 
         for (UUID stockUUID : this.getStockEntries()) {
 
@@ -256,7 +257,7 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
 
                 // If the deletion succeeds for this UUID, no error will be thrown and the return path will be taken, thus not throwing an error
                 this.deleteSignFromList(stockUUID, location, supplier, saver);
-                return;
+                return stockUUID;
 
             } catch (DoesNotExistException ignored) {
 
@@ -380,9 +381,9 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
     }
 
     @Override
-    public synchronized void deleteTransactionSign(Location location) throws DoesNotExistException {
+    public synchronized UUID deleteTransactionSign(Location location) throws DoesNotExistException {
 
-        this.deleteSignFromList(
+        return this.deleteSignFromList(
                 location,
                 this::getTransactionSigns,
                 this::saveTransactionList
@@ -391,9 +392,9 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
     }
 
     @Override
-    public synchronized void deleteHistorySign(Location location) throws DoesNotExistException {
+    public synchronized UUID deleteHistorySign(Location location) throws DoesNotExistException {
 
-        this.deleteSignFromList(
+        return this.deleteSignFromList(
                 location,
                 this::getHistorySigns,
                 this::saveHistoryList
