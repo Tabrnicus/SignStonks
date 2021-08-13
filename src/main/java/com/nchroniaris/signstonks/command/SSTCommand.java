@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public abstract class SSTCommand {
 
@@ -31,6 +32,12 @@ public abstract class SSTCommand {
 
     }
 
+    public abstract boolean execute(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull List<String> args) throws CommandDoesNotExist;
+
+    public abstract @NotNull String getLabel();
+
+    public abstract void sendHelp(Consumer<String> recipient);
+
     protected final Optional<SSTCommand> findSubCommand(@NotNull String label) {
 
         // The stream will only have Commands that match the label in it, at time of #findFirst()
@@ -39,10 +46,5 @@ public abstract class SSTCommand {
                 .findFirst();
 
     }
-
-    public abstract boolean execute(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull List<String> args) throws CommandDoesNotExist;
-
-    public abstract @NotNull String getLabel();
-
 
 }

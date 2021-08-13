@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.function.Consumer;
 
 public class SignStonksCommand extends SSTCommand {
 
@@ -31,4 +32,10 @@ public class SignStonksCommand extends SSTCommand {
 
     }
 
+    @Override
+    public void sendHelp(Consumer<String> recipient) {
+
+        recipient.accept(this.getClass().getCanonicalName() + ": test help message");
+
+    }
 }
