@@ -15,6 +15,22 @@ import java.util.UUID;
 public interface StockRepository extends ConfigurationRepository {
 
     /**
+     * General contract for a method that adds a location to a list. Used to abstract the different methods in this interface
+     */
+    @FunctionalInterface
+    interface LocationAdder {
+        void add(UUID stockUUID, Location location) throws AlreadyExistsException;
+    }
+
+    /**
+     * General contract for a method that removes a location from a list. Used to abstract the different methods in this interface
+     */
+    @FunctionalInterface
+    interface LocationDeleter {
+        UUID delete(Location location) throws DoesNotExistException;
+    }
+
+    /**
      * Gets all "transaction signs" for a specific stock.
      * <p>
      * A "transaction sign" is a sign that is responsible for buying and selling {@link com.nchroniaris.mcstonks.stock.Stock}s to the player.
@@ -111,6 +127,19 @@ public interface StockRepository extends ConfigurationRepository {
      * @throws DoesNotExistException Thrown when the provided {@link Location} does not exist in the storage.
      */
     UUID deleteHistorySign(Location location) throws DoesNotExistException;
+
+    /**
+     * Deletes a sign from the storage for the {@link com.nchroniaris.mcstonks.stock.Stock} specified by its {@link UUID}.
+     * <p>
+     * This will delete the first occurrence only (if exists), so duplicate entries (which are not technically valid) must be deleted with subsequent calls.
+     * <p>
+     * This method is much broader but slower to execute, as it needs to search through both location lists.
+     *
+     * @param location The {@link Location} of the Sign that you want to remove.
+     * @return The UUID of the stock that the sign has been deleted from, for reference
+     * @throws DoesNotExistException Thrown when the provided {@link Location} does not exist in the storage.
+     */
+    UUID deleteSign(Location location) throws DoesNotExistException;
 
     /**
      * Delete the entry specified by the parameter from the storage. This is designed to be used to clean up unused entries in the configuration.

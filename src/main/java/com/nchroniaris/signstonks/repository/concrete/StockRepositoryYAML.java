@@ -251,6 +251,13 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
      */
     private UUID deleteSignFromList(Location location, LocationListSupplier supplier, LocationListSaver saver) throws DoesNotExistException {
 
+        DoesNotExistException dneException = new DoesNotExistException(String.format("Location %d/%d/%d/%s does not exist in any stock's transaction list!",
+                location.getBlockX(),
+                location.getBlockY(),
+                location.getBlockZ(),
+                Objects.requireNonNull(location.getWorld()).getName()
+        ));
+
         for (UUID stockUUID : this.getStockEntries()) {
 
             try {
@@ -259,8 +266,9 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
                 this.deleteSignFromList(stockUUID, location, supplier, saver);
                 return stockUUID;
 
-            } catch (DoesNotExistException ignored) {
+            } catch (DoesNotExistException e) {
 
+                dneException.addSuppressed(e);
                 // We are ignoring this because it is possible that the element may exist under a different UUID's list, and we don't want to prematurely error out.
 
             }
@@ -268,12 +276,7 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
         }
 
         // If execution arrives here, that means that every UUID's list has been exhausted and the location has not been found anywhere. To abide by the method contract, we throw a final error to indicate it wasn't found anywhere.
-        throw new DoesNotExistException(String.format("Location %d/%d/%d/%s does not exist in any stock's transaction list!",
-                location.getBlockX(),
-                location.getBlockY(),
-                location.getBlockZ(),
-                Objects.requireNonNull(location.getWorld()).getName()
-        ));
+        throw dneException;
 
     }
 
@@ -399,6 +402,42 @@ public class StockRepositoryYAML extends ConfigurationRepositoryYAML implements 
                 this::getHistorySigns,
                 this::saveHistoryList
         );
+
+    }
+
+    @Override
+    public synchronized UUID deleteSign(Location location) throws DoesNotExistException {
+
+        DoesNotExistException dneException = new DoesNotExistException(String.format("Location %d/%d/%d/%s does not exist in any stock's transaction list!",
+                location.getBlockX(),
+                location.getBlockY(),
+                location.getBlockZ(),
+                Objects.requireNonNull(location.getWorld()).getName()
+        ));
+
+        // Not sure if there is a better way to do this but this method is coupled to the number of lists in the interface. If it is updated, this must also be updated.
+        LocationDeleter[] locationDeleters = {
+                this::deleteTransactionSign,
+                this::deleteHistorySign,
+        };
+
+        for (LocationDeleter deleter : locationDeleters) {
+
+            try {
+
+                return deleter.delete(location);
+
+            } catch (DoesNotExistException e) {
+
+                dneException.addSuppressed(e);
+                // ignore because we don't want to error out prematurely
+
+            }
+
+        }
+
+        // If we get here that means we haven't returned yet so we throw a final DNEException
+        throw dneException;
 
     }
 
