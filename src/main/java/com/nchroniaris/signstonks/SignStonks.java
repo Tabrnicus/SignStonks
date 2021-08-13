@@ -1,6 +1,6 @@
 package com.nchroniaris.signstonks;
 
-import com.nchroniaris.signstonks.command.RegisterCommandExecutor;
+import com.nchroniaris.signstonks.command.SignStonksCommandExecutor;
 import com.nchroniaris.signstonks.repository.MainRepository;
 import com.nchroniaris.signstonks.repository.StockRepository;
 import com.nchroniaris.signstonks.repository.concrete.MainRepositoryYAML;
@@ -30,14 +30,24 @@ public final class SignStonks extends JavaPlugin {
     }
 
     /**
+     * Initializes the plugin's required repositories
+     */
+    private void initializeRepositories() {
+
+        this.mainRepository = new MainRepositoryYAML(this);
+        this.stockRepository = new StockRepositoryYAML(this);
+
+    }
+
+    /**
      * Registers all the commands with the server
      */
     private void registerCommands() {
 
-        PluginCommand registerCommand = this.getCommand("registerstock");
+        PluginCommand registerCommand = this.getCommand("signstonks");
 
         if (registerCommand != null)
-            registerCommand.setExecutor(new RegisterCommandExecutor(this));
+            registerCommand.setExecutor(new SignStonksCommandExecutor(this));
 
     }
 
@@ -47,16 +57,6 @@ public final class SignStonks extends JavaPlugin {
     private void registerListeners() {
 
 //        this.getServer().getPluginManager().registerEvents(new TestListener(), this);
-
-    }
-
-    /**
-     * Initializes the plugin's required repositories
-     */
-    private void initializeRepositories() {
-
-        this.mainRepository = new MainRepositoryYAML(this);
-        this.stockRepository = new StockRepositoryYAML(this);
 
     }
 

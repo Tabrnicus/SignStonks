@@ -5,8 +5,9 @@ api-version: 1.14
 depend: [ SignShop, NBTAPI ]
 description: Uses SignShop and an external data source to enable a "stock market" in game
 commands:
-  registerstock:
-    description: Registers a valid SignShop sign to a stock. The registered sign will auto update until unregistered.
-    usage: /registerstock <x> <y> <z> <dimension> [uuid]
+  signstonks:
+    description: Main command for all SignStonks related functions.
+    usage: /signstonks help
+    aliases: [ sst ]
 #    permission: TODO
 #    permission-message: TODO
