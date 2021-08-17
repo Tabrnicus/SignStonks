@@ -1,6 +1,7 @@
 package com.nchroniaris.signstonks.command;
 
 import com.nchroniaris.signstonks.command.exception.CommandDoesNotExist;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +33,7 @@ public abstract class SSTCommand {
 
     }
 
-    public abstract boolean execute(@NotNull CommandSender sender, @NotNull org.bukkit.command.Command command, @NotNull String label, @NotNull List<String> args) throws CommandDoesNotExist;
+    public abstract boolean execute(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull List<String> args) throws CommandDoesNotExist;
 
     public abstract @NotNull String getLabel();
 
