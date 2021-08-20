@@ -1,6 +1,7 @@
 package com.nchroniaris.signstonks.commands;
 
 
+import com.nchroniaris.signstonks.SignStonks;
 import com.nchroniaris.signstonks.command.SSTCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -21,7 +22,7 @@ public class SignStonksCommand extends SSTCommand {
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull List<String> args) {
+    public boolean execute(@NotNull SignStonks plugin, @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull List<String> args) {
 
         return false;
 
@@ -40,4 +41,5 @@ public class SignStonksCommand extends SSTCommand {
         recipient.accept(this.getClass().getCanonicalName() + ": test help message");
 
     }
+
 }

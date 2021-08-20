@@ -1,7 +1,7 @@
 package com.nchroniaris.signstonks.commands;
 
+import com.nchroniaris.signstonks.SignStonks;
 import com.nchroniaris.signstonks.command.SSTCommand;
-import com.nchroniaris.signstonks.command.exception.CommandDoesNotExist;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ public class UnregisterCommand extends SSTCommand {
     }
 
     @Override
-    public boolean execute(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull List<String> args) throws CommandDoesNotExist {
+    public boolean execute(@NotNull SignStonks plugin, @NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull List<String> args) {
 
         return false;
 
